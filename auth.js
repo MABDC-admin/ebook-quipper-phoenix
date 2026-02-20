@@ -14,24 +14,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) return null;
+        if (!credentials?.username || !credentials?.password) {
+          console.log("Missing credentials");
+          return null;
+        }
 
         try {
+          console.log(`Checking user: ${credentials.username}`);
           const { rows } = await pool.query(
             'SELECT * FROM "User" WHERE "username" = $1',
             [credentials.username]
           );
           const user = rows[0];
 
-          if (!user) return null;
+          if (!user) {
+            console.log("User not found in DB");
+            return null;
+          }
 
+          console.log("User found, comparing password hash...");
           const passwordMatch = await bcrypt.compare(
             credentials.password,
             user.passwordHash
           );
 
-          if (!passwordMatch) return null;
+          if (!passwordMatch) {
+            console.log("Password mismatch");
+            return null;
+          }
 
+          console.log("Authentication successful!");
           return {
             id: user.id,
             name: user.name,
@@ -40,7 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             gradeLevel: user.gradeLevel,
           };
         } catch (error) {
-          console.error("Auth error:", error);
+          console.error("Critical Auth error:", error);
           return null;
         }
       },
