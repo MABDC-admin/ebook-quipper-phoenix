@@ -10,11 +10,11 @@ const pool = new Pool({
 
 async function checkUser() {
     try {
-        const { rows } = await pool.query('SELECT username, role, "passwordHash" FROM "User" WHERE username = $1', ['denskie']);
+        const { rows } = await pool.query('SELECT username, role, "passwordHash" FROM "User" WHERE username = $1', ['dennis']);
         if (rows.length === 0) {
-            console.log('User "denskie" NOT FOUND');
+            console.log('User "dennis" NOT FOUND');
         } else {
-            console.log('User "denskie" found:', rows[0].username, 'Role:', rows[0].role);
+            console.log('User "dennis" found:', rows[0].username, 'Role:', rows[0].role);
             console.log('Hash exists:', !!rows[0].passwordHash);
         }
     } catch (error) {

@@ -7,15 +7,27 @@ This guide explains how to host the eBook Portal on a private VPS (Virtual Priva
 - **Simplified Networking**: Cloudflare Tunnels bypass complex firewall/NAT configurations.
 - **Persistence**: Long-running processes are more stable for database connection pooling than serverless functions.
 
-## Step 1: VPS Prerequisites
-Install Node.js (v20+) and Git on your VPS:
+## Step 1: System Update & Node.js 22 Installation
+Ubuntu 24.04 works best with Node.js 20 or 22. Here is the safest way to install it:
+
 ```bash
-# Example for Ubuntu
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+# Update system packages
+sudo apt update && sudo apt upgrade -y
+
+# Install Node.js 22 (Current LTS recommendation)
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt-get install -y nodejs git
+
+# Verify versions
+node -v # Should be v22.x.x
+npm -v
 ```
 
-## Step 2: Clone and Setup
+## Step 2: Install Process Manager (PM2)
+To keep your app running even after you close the terminal:
+```bash
+sudo npm install -g pm2
+```
 1. Clone your repository:
    ```bash
    git clone https://github.com/your-username/ebook-quipper-phoenix.git
