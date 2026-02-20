@@ -45,6 +45,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const hasRole = !!auth?.user?.role;
+      const isLoginPage = nextUrl.pathname === '/login';
+      const isApiAuthPage = nextUrl.pathname.startsWith('/api/auth');
+
+      // Allow API auth and login page always
+      if (isApiAuthPage || isLoginPage) return true;
+
+      // If logged in but session is stale (missing role), force redirect to login
+      if (isLoggedIn && !hasRole) {
+        console.log("Stale session detected, forcing redirect to login");
+        return false;
+      }
+
+      // Standard protected route check
+      return isLoggedIn;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
