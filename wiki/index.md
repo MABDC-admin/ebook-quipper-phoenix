@@ -9,6 +9,7 @@ Welcome to the **eBook Portal** developer documentation. This wiki provides a co
 - [📡 API Reference](api-reference.md) - Documentation for all REST API endpoints.
 - [⚛️ Frontend Architecture](frontend-architecture.md) - Overview of the Next.js App Router and UI components.
 - [🚀 Railway Deployment](railway.md) - Guide for deploying the app to Railway.
+- [☁️ VPS Deployment](vps-deployment.md) - Guide for VPS + Cloudflare Tunnels.
 
 ## Technology Stack
 
