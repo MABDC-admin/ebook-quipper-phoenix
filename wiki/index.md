@@ -8,6 +8,7 @@ Welcome to the **eBook Portal** developer documentation. This wiki provides a co
 - [🔐 Authentication System](authentication.md) - Explanation of NextAuth and raw SQL integration.
 - [📡 API Reference](api-reference.md) - Documentation for all REST API endpoints.
 - [⚛️ Frontend Architecture](frontend-architecture.md) - Overview of the Next.js App Router and UI components.
+- [🚀 Railway Deployment](railway.md) - Guide for deploying the app to Railway.
 
 ## Technology Stack
 
