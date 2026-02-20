@@ -48,6 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.name = user.name;
         token.role = user.role;
         token.username = user.username;
         token.gradeLevel = user.gradeLevel;
@@ -55,10 +56,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.role = token.role;
-      session.user.username = token.username;
-      session.user.gradeLevel = token.gradeLevel;
+      if (session.user) {
+        session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.role = token.role;
+        session.user.username = token.username;
+        session.user.gradeLevel = token.gradeLevel;
+      }
       return session;
     },
   },
