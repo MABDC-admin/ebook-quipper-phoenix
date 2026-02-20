@@ -20,6 +20,13 @@ async function main() {
             ON CONFLICT (username) DO NOTHING
         `, ['denskie', 'Denskie (Admin)', adminHash, 'admin', 'all']);
 
+        // Upsert second admin user
+        await pool.query(`
+            INSERT INTO "User" (username, name, "passwordHash", role, "gradeLevel", "updatedAt")
+            VALUES ($1, $2, $3, $4, $5, NOW())
+            ON CONFLICT (username) DO NOTHING
+        `, ['dennis', 'Dennis (Admin)', adminHash, 'admin', 'all']);
+
         // Upsert Quipper resource
         await pool.query(`
             INSERT INTO "Resource" (name, slug, description, "driveFolderId", icon, color, "sortOrder", "updatedAt")
