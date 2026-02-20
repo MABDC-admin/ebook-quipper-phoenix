@@ -1,6 +1,6 @@
 # VPS + Cloudflare Tunnel Deployment
 
-This guide explains how to host the eBook Portal on a private VPS (Virtual Private Server) while keeping the database on Railway and using Cloudflare Tunnels for secure access.
+This guide explains how to host the eBook Portal on a private VPS (Virtual Private Server) while keeping the database local and using Cloudflare Tunnels for secure access.
 
 ## Why this approach?
 - **Full Control**: You manage the Node.js environment directly.
@@ -24,11 +24,11 @@ Set up your local database and user:
 sudo -i -u postgres
 
 # Create database and user
-psql -c "CREATE DATABASE classroom_db;"
-psql -c "CREATE USER classroom_user WITH PASSWORD 'YourComplexPassword';"
-psql -c "GRANT ALL PRIVILEGES ON DATABASE classroom_db TO classroom_user;"
+psql -c "CREATE DATABASE ebook_db;"
+psql -c "CREATE USER ebook_db WITH PASSWORD 'Denskie123';"
+psql -c "GRANT ALL PRIVILEGES ON DATABASE ebook_db TO ebook_db;"
 # In Postgres 15+, you also need to grant schema permissions:
-psql -d classroom_db -c "GRANT ALL ON SCHEMA public TO classroom_user;"
+psql -d ebook_db -c "GRANT ALL ON SCHEMA public TO ebook_db;"
 
 exit
 ```
@@ -37,7 +37,7 @@ exit
 Your `.env` file on the VPS should now look like this:
 
 ```bash
-DATABASE_URL="postgresql://classroom_user:YourComplexPassword@localhost:5432/classroom_db"
+DATABASE_URL="postgresql://ebook_db:Denskie123@localhost:5432/ebook_db"
 NEXTAUTH_SECRET="7d488e3648f58319a9d24959db62e6e3"
 NEXTAUTH_URL="https://your-domain.com"
 AUTH_URL="https://your-domain.com"
