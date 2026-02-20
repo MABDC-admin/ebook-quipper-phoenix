@@ -2,8 +2,10 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import pool from "./lib/db";
+import authConfig from "./auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -45,24 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const hasRole = !!auth?.user?.role;
-      const isLoginPage = nextUrl.pathname === '/login';
-      const isApiAuthPage = nextUrl.pathname.startsWith('/api/auth');
-
-      // Allow API auth and login page always
-      if (isApiAuthPage || isLoginPage) return true;
-
-      // If logged in but session is stale (missing role), force redirect to login
-      if (isLoggedIn && !hasRole) {
-        console.log("Stale session detected, forcing redirect to login");
-        return false;
-      }
-
-      // Standard protected route check
-      return isLoggedIn;
-    },
+    ...authConfig.callbacks,
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -83,9 +68,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
-  },
-  pages: {
-    signIn: "/login",
   },
   session: { strategy: "jwt" },
   trustHost: true,
