@@ -1,10 +1,14 @@
-import prisma from '../../../lib/prisma';
+import pool from '../../../lib/db';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-    const resources = await prisma.resource.findMany({
-        where: { active: true },
-        orderBy: { sortOrder: 'asc' },
-    });
-    return NextResponse.json({ resources });
+    try {
+        const { rows } = await pool.query(
+            'SELECT * FROM "Resource" WHERE "active" = true ORDER BY "sortOrder" ASC'
+        );
+        return NextResponse.json({ resources: rows });
+    } catch (error) {
+        console.error("Fetch resources error:", error);
+        return NextResponse.json({ error: "Failed to fetch resources" }, { status: 500 });
+    }
 }
